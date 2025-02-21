@@ -18,7 +18,7 @@ contract Marketplace is Ownable, ERC721Holder {
      event NFTAddedMarketPlace(uint256 _tokenId);
      event NFTPurchased(address to, uint256 tokenId);
 
-    //Para gespegar los contratos
+    // To deploy the contracts
     DubaiERC20 public erc20Contract;
     DubaiNFT public nftContract;
 
