@@ -11,7 +11,7 @@ contract DubaiERC20 is ERC20, Ownable {
     
 
     function mintDubaiERC20(address account, uint256 value) external onlyOwner {
-        //Llamamos a la function _mint que esta en el token ERC ( de la importacion)
+        // Call the _mint function that is in the ERC token (from the import)
         _mint(account, value);
     }
 }
