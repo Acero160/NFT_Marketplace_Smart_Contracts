@@ -43,29 +43,29 @@ contract Marketplace is Ownable, ERC721Holder {
         }
         availableNFTs[_tokenId] = true;
 
-        //Si todo ha salido bien emitimos el evento de añadir el nuevo NFT
+        // If everything went well, we emit the event to add the new NFT
         emit NFTAddedMarketPlace(_tokenId);
 
     }
 
     function buyDubaiNFT(uint256 _tokenId) external payable {
-        //Comprobamos que el usuario tenga suficiente dinero
+        // Check if the user has enough funds
         if (msg.value < nftPrice) {
             revert DubaiMarquetplaceInsufficientFunds();
         }
 
-        //Comprobamos que haya NFts para comprar
+        // Check that there are NFTs available for purchase
         if(!availableNFTs[_tokenId]) {
             revert DubaiNFTNonAvailable();
         }
 
         availableNFTs[_tokenId] = false;
 
-        //Enviamos tokens
+        //Send tokens
         nftContract.safeTransferFrom(address(this), msg.sender, _tokenId);
 
         uint256 excessAmount = msg.value - nftPrice;
-        //Devolver lo que sobra
+        // Return the excess amount
         if(excessAmount>0){
             (bool succes, ) = msg.sender.call{value: excessAmount}("");
             require(succes, "refund failed");
@@ -84,17 +84,17 @@ contract Marketplace is Ownable, ERC721Holder {
         rewardTokens = _rewardTokens;
     }
 
-    //Funcion pasar NFT y obtener el dinero(beneficios)
+    // Function to transfer the NFT and receive the money (profits)
     function withdraw() external onlyOwner {
         payable(owner()).transfer(address(this).balance);
     }
 
-    //Consultar direccion
+    //Check address
     function getERC20Address() external view returns (address) {
         return address(erc20Contract);
     }
 
-    //Consultar NFT
+    //Check NFT
     function getNFTAddress() external view returns (address) {
         return address(nftContract);
     }
@@ -113,7 +113,7 @@ contract Marketplace is Ownable, ERC721Holder {
         uint256[] memory tokenIds = new uint256[](count);
         uint256 index = 0;
 
-        //Array para meter NFT cuando compran
+        // Array to store NFTs when they are purchased
         for(uint i = 1; i<= totalSupply; i++) {
              if(availableNFTs[i]){
                 tokenIds[index] = i;
